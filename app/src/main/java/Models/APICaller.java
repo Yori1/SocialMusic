@@ -19,8 +19,20 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.Buffer;
+import java.util.function.Function;
 
 public class APICaller extends AsyncTask<String, String, String> {
+
+    String result = "";
+
+
+    public APICaller()
+    {
+    }
+
+    public String getResult() {
+        return result;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -33,10 +45,9 @@ public class APICaller extends AsyncTask<String, String, String> {
         String data = params[1]; //data to post
         String responseMessage = "not set";
         HttpURLConnection httpURLConnection =null;
-
         try {
             URL url = new URL(urlString);
-             httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("body", data);
             httpURLConnection.setDoOutput(true);
@@ -58,6 +69,15 @@ public class APICaller extends AsyncTask<String, String, String> {
         finally {
             return responseMessage;
         }
+    }
+
+
+
+    @Override
+    protected void onPostExecute(String result)
+    {
+        super.onPostExecute(result);
+        this.result = result;
     }
 
     private String getOutputUrlConnection(HttpURLConnection httpURLConnection)
