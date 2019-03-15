@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity
                 RC_SIGN_IN);
     }
 
+    //Menucode
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, Profile.class);
             intent.putExtra("userId", userId);
             intent.putExtra("googleDisplayName", googleDisplayName);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
         }
 
