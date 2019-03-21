@@ -9,14 +9,31 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public abstract class DrawerLayoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawerLayout = null;
+
+    protected FirebaseDatabase firebaseDatabase;
+
+    private Intent intent;
+
+    private boolean displayNameBeingSet;
+
+    private TextView displayTextTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +54,44 @@ public abstract class DrawerLayoutActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        
+        View headerView = navigationView.getHeaderView(0);
+        displayTextTextView = headerView.findViewById(R.id.displayNameTextManu);
+
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        intent = getIntent();
+
+        setUserInformation();
+    }
+
+    void setUserInformation()
+    {
+        String userId = intent.getStringExtra("userId");
+        String userGoogleDisplayName = intent.getStringExtra("googleDisplayName");
+
+
+        DatabaseReference userReference = firebaseDatabase.getReference("users").child(userId);
+        userReference.child("displayName").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (!snapshot.exists() && !displayNameBeingSet)
+                {
+                    userReference.child(userId).setValue(userGoogleDisplayName);
+                    displayNameBeingSet = true;
+                }
+                else
+                {
+                    displayTextTextView.setText(snapshot.getValue(String.class));
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("firebase", databaseError.getMessage());
+            }
+
+        });
     }
 
     @Override
@@ -55,20 +110,6 @@ public abstract class DrawerLayoutActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
