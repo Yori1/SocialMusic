@@ -1,6 +1,9 @@
 package com.example.socialmusic;
 
+import android.app.Application;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Window;
@@ -12,13 +15,13 @@ import java.util.List;
 import Models.Adapter;
 import Models.CardItem;
 
-public class MainActivity extends DrawerLayoutActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstance)
     {
         super.onCreate(savedInstance);
-        setMenuLayoutElements(R.layout.activity_main, R.id.toolbar_main, R.id.drawer_layout_main);
+        setContentView(R.layout.activity_main);
 
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
