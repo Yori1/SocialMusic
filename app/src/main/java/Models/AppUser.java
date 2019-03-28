@@ -1,11 +1,13 @@
 package Models;
 
-public class User {
+import android.net.Uri;
+
+public class AppUser {
     String displayName;
     String description;
     String image;
 
-    public User(String displayName, String description, String image) {
+    public AppUser(String displayName, String description, String image) {
         this.displayName = displayName;
         this.description = description;
         this.image = image;

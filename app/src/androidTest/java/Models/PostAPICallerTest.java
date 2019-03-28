@@ -5,11 +5,9 @@ import android.os.AsyncTask;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.function.Function;
+import Services.PostAPICaller;
 
-import static org.junit.Assert.*;
-
-public class APICallerTest {
+public class PostAPICallerTest {
 
     @Test
     public void testTokenRequest() {
@@ -17,7 +15,7 @@ public class APICallerTest {
         String jsonToPost = "{\"TokenString\":\"a\"}";
         String[] params = {urlToCall, jsonToPost};
 
-        APICaller apiCaller = new APICaller();
+        PostAPICaller apiCaller = new PostAPICaller();
         apiCaller.execute(params);
         while(apiCaller.getStatus() != AsyncTask.Status.FINISHED) {}
         Assert.assertEquals(apiCaller.getResult(), "a");

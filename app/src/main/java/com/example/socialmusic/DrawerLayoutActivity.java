@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.FirebaseApp;
@@ -21,19 +22,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.squareup.picasso.Picasso;
+
+import javax.annotation.Nullable;
 
 public abstract class DrawerLayoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawerLayout = null;
 
-    protected FirebaseDatabase firebaseDatabase;
+    protected FirebaseFirestore fireStore;
+
 
     private Intent intent;
 
     private boolean displayNameBeingSet;
 
     private TextView displayTextTextView;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +65,14 @@ public abstract class DrawerLayoutActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        
+
         View headerView = navigationView.getHeaderView(0);
         displayTextTextView = headerView.findViewById(R.id.displayNameTextManu);
 
+        imageView = headerView.findViewById(R.id.imageView);
+
         FirebaseApp.initializeApp(this);
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        fireStore = FirebaseFirestore.getInstance();
 
         intent = getIntent();
 
@@ -72,25 +85,16 @@ public abstract class DrawerLayoutActivity extends AppCompatActivity
         String userGoogleDisplayName = intent.getStringExtra("googleDisplayName");
 
 
-        DatabaseReference userReference = firebaseDatabase.getReference("users").child(userId);
-        userReference.child("displayName").addValueEventListener(new ValueEventListener() {
+        DocumentReference userReference = fireStore.collection("users").document(userId);
+        userReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (!snapshot.exists() && !displayNameBeingSet)
-                {
-                    userReference.child(userId).setValue(userGoogleDisplayName);
-                    displayNameBeingSet = true;
-                }
-                else
-                {
-                    displayTextTextView.setText(snapshot.getValue(String.class));
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e("firebase", databaseError.getMessage());
-            }
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                String displayName = documentSnapshot.getString("displayName");
+                String imageUrl = documentSnapshot.getString("image");
+                displayTextTextView.setText(displayName);
+                Picasso.get().load(imageUrl).into(imageView);
 
+            }
         });
     }
 
