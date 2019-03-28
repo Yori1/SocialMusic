@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -46,11 +47,11 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:id="@+id/textViewName"
+                android:layout_width="177dp"
+                android:layout_height="109dp"
+                android:layout_marginStart="184dp"
+                android:layout_marginTop="24dp"
                 android:text="Some User"
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +59,7 @@
 
             <ListView
                 android:id="@+id/listview_profile_reviews"
-                android:layout_width="393dp"
+                android:layout_width="370dp"
                 android:layout_height="406dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -71,6 +72,16 @@
                 app:layout_constraintVertical_bias="0.848">
 
             </ListView>
+
+            <ImageView
+                android:id="@+id/imageViewProfilePicture"
+                android:layout_width="119dp"
+                android:layout_height="106dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.design.widget.CoordinatorLayout>

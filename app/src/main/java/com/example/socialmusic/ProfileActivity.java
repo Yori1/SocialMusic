@@ -2,20 +2,48 @@ package com.example.socialmusic;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.squareup.picasso.Picasso;
+
+import javax.annotation.Nullable;
+
 public class ProfileActivity extends DrawerLayoutActivity {
+
+    private TextView textViewDisplayName;
+    private ImageView imageViewUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMenuLayoutElements(R.layout.activity_profile_normal, R.id.toolbar_profile, R.id.drawer_layout_profile);
-        setButtonThoughSharingActivityEvent();
+        setButtonThroughSharingActivityEvent();
+
+        textViewDisplayName = findViewById(R.id.textViewName);
+        imageViewUser = findViewById(R.id.imageViewProfilePicture);
+
+        String userId = getIntent().getStringExtra("userId");
+        fireStore.collection("users").document(userId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                String displayName  = documentSnapshot.get("displayName").toString();
+                String urlImage = documentSnapshot.get("image").toString();
+
+                textViewDisplayName.setText(displayName);
+                Picasso.get().load(urlImage).into(imageViewUser);
+            }
+        });
+
+
     }
 
-    private void setButtonThoughSharingActivityEvent(){
+    private void setButtonThroughSharingActivityEvent(){
         Button buttonThoughtActivity = findViewById(R.id.buttonShareThoughts);
 
         buttonThoughtActivity.setOnClickListener(c -> {
