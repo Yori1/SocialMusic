@@ -7,6 +7,5 @@
     </style>
 
     <style name="CustomTheme" parent="AppTheme.NoActionBar">
-        <item name="android:textColor">#FFFFFF</item>
     </style>
 </resources>

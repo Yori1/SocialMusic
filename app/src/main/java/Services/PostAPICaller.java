@@ -1,4 +1,4 @@
-package Models;
+package Services;
 
 import android.os.AsyncTask;
 
@@ -21,12 +21,12 @@ import java.net.URL;
 import java.nio.Buffer;
 import java.util.function.Function;
 
-public class APICaller extends AsyncTask<String, String, String> {
+public class PostAPICaller extends AsyncTask<String, String, String> {
 
     String result = "";
 
 
-    public APICaller()
+    public PostAPICaller()
     {
     }
 
@@ -51,7 +51,7 @@ public class APICaller extends AsyncTask<String, String, String> {
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("body", data);
             httpURLConnection.setDoOutput(true);
-            httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
+            httpURLConnection.setRequestProperty("AppUser-Agent", "Mozilla/5.0");
             httpURLConnection.setRequestProperty("Content-Type", "application/json;");
 
             byte[] outputInBytes = data.getBytes("UTF-8");
