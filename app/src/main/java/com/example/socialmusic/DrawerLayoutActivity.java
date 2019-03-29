@@ -84,7 +84,6 @@ public abstract class DrawerLayoutActivity extends AppCompatActivity
         String userId = intent.getStringExtra("userId");
         String userGoogleDisplayName = intent.getStringExtra("googleDisplayName");
 
-
         DocumentReference userReference = fireStore.collection("users").document(userId);
         userReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -93,7 +92,6 @@ public abstract class DrawerLayoutActivity extends AppCompatActivity
                 String imageUrl = documentSnapshot.getString("image");
                 displayTextTextView.setText(displayName);
                 Picasso.get().load(imageUrl).into(imageView);
-
             }
         });
     }

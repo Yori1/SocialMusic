@@ -13,9 +13,14 @@ import android.widget.EditText;
 import com.google.android.gms.tasks.SuccessContinuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import Models.Review;
+import Models.ReviewId;
 
 public class ShareThoughtActivity extends DrawerLayoutActivity {
     private Button submit;
@@ -39,10 +44,12 @@ public class ShareThoughtActivity extends DrawerLayoutActivity {
     {
         String userId = getIntent().getStringExtra("userId");
         Review review = new Review(editTextSongName.getText().toString(), editTextContent.getText().toString());
-        fireStore.collection("users").document(userId).collection("reviews").add(review).onSuccessTask(d -> {
-            Intent intent = buildIntentForActivity(ProfileActivity.class);
-            startActivity(intent);
-            return null;
+        fireStore.collection("reviews").add(review).addOnSuccessListener(addedReview -> {
+
+            fireStore.collection("users").document(userId).update("reviewIds", FieldValue.arrayUnion(addedReview.getId()));
         });
+
+        Intent intent = buildIntentForActivity(ProfileActivity.class);
+        startActivity(intent);
     }
 }

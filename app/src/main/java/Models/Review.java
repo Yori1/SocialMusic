@@ -4,6 +4,8 @@ public class Review {
     private String songName;
     private String content;
 
+    public Review () {}
+
     public Review(String songName, String content) {
         this.songName = songName;
         this.content = content;

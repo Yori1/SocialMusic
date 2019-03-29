@@ -6,19 +6,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.socialmusic.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.myViewHolder> {
+public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> {
 
     Context mContext;
     List<CardItem> mData;
 
-    public Adapter(Context mContext, List<CardItem> mData) {
+    public CardAdapter(Context mContext, List<CardItem> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -26,7 +28,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.myViewHolder> {
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View v = inflater.inflate(R.layout.card_item, viewGroup, false);
         return new myViewHolder(v);
@@ -34,9 +35,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.myViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder myViewHolder, int i) {
-        myViewHolder.background_img.setImageResource(mData.get(i).getBackground());
-        myViewHolder.profilePhoto.setImageResource(mData.get(i).getProfilePhoto());
-        myViewHolder.tv_profileName.setText(mData.get(i).profileName);
+        Picasso.get().load(mData.get(i).getAppUser().getImage()).into(myViewHolder.profilePhoto);
+        myViewHolder.textViewSongName.setText(mData.get(i).getReview().getSongName());
+        myViewHolder.textViewContent.setText(mData.get(i).getReview().getContent());
     }
 
     @Override
@@ -46,16 +47,21 @@ public class Adapter extends RecyclerView.Adapter<Adapter.myViewHolder> {
 
     public class myViewHolder extends RecyclerView.ViewHolder{
 
-
         ImageView profilePhoto,background_img;
-        TextView tv_profileName;
+        TextView textViewSongName;
+        TextView textViewContent;
+        Button buttonFollow;
+        Button buttonSpotify;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
 
             profilePhoto = itemView.findViewById(R.id.profile_img);
             background_img = itemView.findViewById(R.id.card_background);
-            tv_profileName = itemView.findViewById(R.id.profile_name);
+            textViewSongName = itemView.findViewById(R.id.textViewSongName);
+            textViewContent = itemView.findViewById(R.id.textViewDetails);
+            buttonFollow = itemView.findViewById(R.id.buttonFollow);
+            buttonSpotify = itemView.findViewById(R.id.buttonSpotify);
         }
     }
 }
