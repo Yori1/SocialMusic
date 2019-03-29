@@ -18,6 +18,7 @@ public class MainActivity extends DrawerLayoutActivity {
     protected void onCreate(Bundle savedInstance)
     {
         super.onCreate(savedInstance);
+        //This method sets the views in the abstract class DrawerLayoutActivity
         setMenuLayoutElements(R.layout.activity_main, R.id.toolbar_main, R.id.drawer_layout_main);
 
         Window w = getWindow();
@@ -28,6 +29,12 @@ public class MainActivity extends DrawerLayoutActivity {
         itemList.add(new CardItem(R.drawable.background1, "Henk", R.drawable.profile_pic1));
         itemList.add(new CardItem(R.drawable.background2, "Chris", R.drawable.profile_pic2));
         itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
+
         Adapter adapter = new Adapter(this, itemList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
