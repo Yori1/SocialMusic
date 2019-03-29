@@ -78,7 +78,8 @@ public class MainActivity extends DrawerLayoutActivity {
                 if(documentsFound.size() > 0)
                 {
                     AppUser appUser = documentsFound.get(0).toObject(AppUser.class);
-                    itemList.add(new CardItem(appUser, review));
+                    cardAdapter.addToList(new CardItem(appUser, review));
+
                 }
             }
         });

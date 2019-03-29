@@ -3,6 +3,7 @@ package Models;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.style.TtsSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,17 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
     public CardAdapter(Context mContext, List<CardItem> mData) {
         this.mContext = mContext;
         this.mData = mData;
+    }
+
+    public void clearList()
+    {
+        mData.clear();
+    }
+
+    public void addToList(CardItem cardItem)
+    {
+        mData.add(cardItem);
+        notifyDataSetChanged();
     }
 
     @NonNull
