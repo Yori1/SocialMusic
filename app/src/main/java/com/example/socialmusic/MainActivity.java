@@ -60,7 +60,7 @@ public class MainActivity extends DrawerLayoutActivity {
         fireStore.collection("reviews").limit(limitCardsToDisplay).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                itemList.clear();
+                cardAdapter.clearList();
                 queryDocumentSnapshots.forEach(reviewSnapshot -> {
                     Review review = reviewSnapshot.toObject(Review.class);
                     addCardItemToList(review, reviewSnapshot.getId());
@@ -78,8 +78,8 @@ public class MainActivity extends DrawerLayoutActivity {
                 if(documentsFound.size() > 0)
                 {
                     AppUser appUser = documentsFound.get(0).toObject(AppUser.class);
-                    cardAdapter.addToList(new CardItem(appUser, review));
-
+                    CardItem cardItem = new CardItem(appUser, review);
+                    cardAdapter.addToList(cardItem);
                 }
             }
         });

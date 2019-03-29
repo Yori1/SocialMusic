@@ -68,14 +68,14 @@
         android:id="@+id/textViewSongName"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="112dp"
-        android:layout_marginBottom="124dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="12dp"
         android:text="TextView"
         android:textColor="#f1f1f1"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/textViewDetails"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textViewDetails"
