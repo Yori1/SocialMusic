@@ -1,48 +1,19 @@
 package Models;
 
 public class CardItem {
+    private AppUser appUser;
+    private Review review;
 
-    public int getBackground() {
-        return background;
+    public CardItem(AppUser appUser, Review review) {
+        this.appUser = appUser;
+        this.review = review;
     }
 
-    public void setBackground(int background) {
-        this.background = background;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
-    public String getProfileName() {
-        return profileName;
-    }
-
-    public void setProfileName(String profileName) {
-        this.profileName = profileName;
-    }
-
-    public int getProfilePhoto() {
-        return profilePhoto;
-    }
-
-    public void setProfilePhoto(int profilePhoto) {
-        this.profilePhoto = profilePhoto;
-    }
-
-
-
-    int background;
-    String profileName;
-    int profilePhoto;
-
-    public CardItem() {
-    }
-
-    public CardItem(int background, String profileName, int profilePhoto) {
-        this.background = background;
-        this.profileName = profileName;
-        this.profilePhoto = profilePhoto;
-    }
-
-    public CardItem(String profileName, int profilePhoto) {
-        this.profileName = profileName;
-        this.profilePhoto = profilePhoto;
+    public Review getReview() {
+        return review;
     }
 }

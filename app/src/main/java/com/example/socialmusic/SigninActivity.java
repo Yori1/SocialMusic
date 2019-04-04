@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,13 +19,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import Models.AppUser;
 
@@ -68,12 +73,28 @@ public class SigninActivity extends AppCompatActivity {
     {
         // Successfully signed in
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference userReference = database.getReference(user.getUid());
 
-        AppUser appUser = new AppUser(user.getDisplayName(), "", user.getPhotoUrl().toString());
-        String userId;
+
+
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseFirestore.collection("users").document(user.getUid()).set(appUser);
+        firebaseFirestore.collection("users").document(user.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot.exists())
+                {
+                    Map<String, Object> fieldsToUpdate = new HashMap<>();
+                    fieldsToUpdate.put("displayName", user.getDisplayName());
+                    fieldsToUpdate.put("image", user.getPhotoUrl().toString());
+
+                    firebaseFirestore.collection("users").document(user.getUid()).update(fieldsToUpdate);
+                }
+                else
+                {
+                    AppUser appUser = new AppUser(user.getDisplayName(), "", user.getPhotoUrl().toString());
+                    firebaseFirestore.collection("users").document(user.getUid()).set(appUser);
+                }
+            }
+        });
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("userId", user.getUid());
