@@ -41,5 +41,8 @@ public class CardItem {
         this.profilePhoto = profilePhoto;
     }
 
-
+    public CardItem(String profileName, int profilePhoto) {
+        this.profileName = profileName;
+        this.profilePhoto = profilePhoto;
+    }
 }

@@ -8,7 +8,7 @@
     android:fitsSystemWindows="true"
     android:background="@color/colorAccent"
     >
-    
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,17 +25,35 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent">
 
-        </android.support.design.widget.AppBarLayout>
+                    <android.support.design.widget.TabItem
+                        android:id="@+id/tabRecent"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="@string/recent_reviews"
+                        />
+                    <android.support.design.widget.TabItem
+                        android:id="@+id/tabItemFollowed"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="@string/followed_reviews"
+                        />
+                </android.support.design.widget.TabLayout>
+
+
+            </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/cardList_RV"
             android:layout_width="match_parent"
-            android:layout_height="671dp"
-            android:layout_marginTop="60dp"
+            android:layout_height="624dp"
+            android:layout_marginTop="105dp"
             app:layout_anchor="@+id/appBarLayout"
-            app:layout_anchorGravity="bottom|center"
-            />
+            app:layout_anchorGravity="bottom|center" />
     </android.support.design.widget.CoordinatorLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

@@ -26,14 +26,14 @@ public class MainActivity extends DrawerLayoutActivity {
 
         RecyclerView recyclerView = findViewById(R.id.cardList_RV);
         List<CardItem> itemList = new ArrayList<>();
-        itemList.add(new CardItem(R.drawable.background1, "Henk", R.drawable.profile_pic1));
-        itemList.add(new CardItem(R.drawable.background2, "Chris", R.drawable.profile_pic2));
-        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
-        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
-        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
-        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
-        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
-        itemList.add(new CardItem(R.drawable.background1, "Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem("Henk", R.drawable.profile_pic1));
+        itemList.add(new CardItem("Chris", R.drawable.profile_pic2));
+        itemList.add(new CardItem("Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem("Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem("Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem("Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem("Anonymous", R.drawable.profile_pic3));
+        itemList.add(new CardItem("Anonymous", R.drawable.profile_pic3));
 
         Adapter adapter = new Adapter(this, itemList);
         recyclerView.setAdapter(adapter);
