@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +24,7 @@ public class ProfileActivity extends DrawerLayoutActivity {
         setMenuLayoutElements(R.layout.activity_profile_normal, R.id.toolbar_profile, R.id.drawer_layout_profile);
         setButtonThroughSharingActivityEvent();
 
-        textViewDisplayName = findViewById(R.id.textViewName);
+        textViewDisplayName = findViewById(R.id.textViewNameOtherUser);
         imageViewUser = findViewById(R.id.imageViewProfilePicture);
 
         String userId = getIntent().getStringExtra("userId");
