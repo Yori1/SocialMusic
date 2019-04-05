@@ -1,23 +1,21 @@
-package Models;
+package com.example.socialmusic;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.style.TtsSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.socialmusic.OtherUserProfileActivity;
-import com.example.socialmusic.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import Models.CardItem;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> {
     Context mContext;

@@ -1,44 +1,46 @@
 package com.example.socialmusic;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.zip.Inflater;
 
 import javax.annotation.Nullable;
 
 import Models.AppUser;
-import Models.CardAdapter;
 import Models.CardItem;
 import Models.Review;
 
 public class MainActivity extends DrawerLayoutActivity {
     private final long limitCardsToDisplay = 30;
 
-    List<CardItem> itemList;
-    CardAdapter cardAdapter;
+    List<CardItem> recentCardItems;
+    List<CardItem> followingCardItems;
+    RecyclerFragmentAdapter recyclerFragmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstance)
     {
         super.onCreate(savedInstance);
+
+        recentCardItems = new ArrayList<>();
+        followingCardItems = new ArrayList<>();
+
         //This method sets the views in the abstract class DrawerLayoutActivity
         setMenuLayoutElements(R.layout.activity_main, R.id.toolbar_main, R.id.drawer_layout_main);
         setCardAdapterToReviewList();
         configureFireStoreToLoadNewReviewsIntoList();
-
     }
 
     private void setCardAdapterToReviewList()
@@ -46,12 +48,15 @@ public class MainActivity extends DrawerLayoutActivity {
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-        RecyclerView recyclerView = findViewById(R.id.cardList_RV);
-        itemList = new ArrayList<>();
+        recyclerFragmentAdapter = new RecyclerFragmentAdapter(getSupportFragmentManager(),
+                MainActivity.this, recentCardItems, followingCardItems);
 
-        cardAdapter = new CardAdapter(this, itemList);
-        recyclerView.setAdapter(cardAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ViewPager viewPager = findViewById(R.id.viewpager);
+
+        viewPager.setAdapter(recyclerFragmentAdapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void configureFireStoreToLoadNewReviewsIntoList()
@@ -59,7 +64,7 @@ public class MainActivity extends DrawerLayoutActivity {
         fireStore.collection("reviews").limit(limitCardsToDisplay).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                cardAdapter.clearList();
+                recyclerFragmentAdapter.getFragmentRecent().getCardAdapter().clearList();
                 queryDocumentSnapshots.forEach(reviewSnapshot -> {
                     Review review = reviewSnapshot.toObject(Review.class);
                     addCardItemToList(review, reviewSnapshot.getId());
@@ -78,7 +83,7 @@ public class MainActivity extends DrawerLayoutActivity {
                 {
                     AppUser appUser = documentsFound.get(0).toObject(AppUser.class);
                     CardItem cardItem = new CardItem(documentsFound.get(0).getId(), appUser, review);
-                    cardAdapter.addToList(cardItem);
+                    recyclerFragmentAdapter.getFragmentRecent().getCardAdapter().addToList(cardItem);
                 }
             }
         });

@@ -23,13 +23,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import Models.AppUser;
-import Models.CardAdapter;
 import Models.CardItem;
 import Models.Review;
 
