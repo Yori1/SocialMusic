@@ -30,6 +30,7 @@ public class MainActivity extends DrawerLayoutActivity {
     List<CardItem> itemList;
     CardAdapter cardAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstance)
     {
