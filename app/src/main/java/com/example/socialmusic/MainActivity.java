@@ -1,6 +1,8 @@
 package com.example.socialmusic;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -37,10 +39,18 @@ public class MainActivity extends DrawerLayoutActivity {
         recentCardItems = new ArrayList<>();
         followingCardItems = new ArrayList<>();
 
-        //This method sets the views in the abstract class DrawerLayoutActivity
         setMenuLayoutElements(R.layout.activity_main, R.id.toolbar_main, R.id.drawer_layout_main);
         setCardAdapterToReviewList();
         configureFireStoreToLoadNewReviewsIntoList();
+
+        FloatingActionButton fab = findViewById(R.id.floatingActionButtonAdd);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = buildIntentForActivity(ShareThoughtActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setCardAdapterToReviewList()

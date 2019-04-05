@@ -1,7 +1,10 @@
 package com.example.socialmusic;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,6 +64,23 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
                 intent.putExtra("ownerProfilePageId", mData.get(i).getUserFirebaseId());
                 intent.putExtra("userId" ,userId);
                 mContext.startActivity(intent);
+            }
+        });
+
+
+        String songName = mData.get(i).getReview().getSongName();
+        myViewHolder.buttonSpotify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
+                intent.setComponent(new ComponentName("com.spotify.music", "com.spotify.music.MainActivity"));
+                intent.putExtra(MediaStore.EXTRA_MEDIA_FOCUS, MediaStore.Audio.Media.ENTRY_CONTENT_TYPE);
+                intent.putExtra(MediaStore.EXTRA_MEDIA_ARTIST, songName);
+                intent.putExtra(SearchManager.QUERY, songName);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+                    mContext.startActivity(intent);
+                }
             }
         });
     }
