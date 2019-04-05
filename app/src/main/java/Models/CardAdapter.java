@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -63,7 +64,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
         TextView textViewSongName;
         TextView textViewContent;
         Button buttonFollow;
-        Button buttonSpotify;
+        ImageButton buttonSpotify;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,7 +74,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
             textViewSongName = itemView.findViewById(R.id.textViewSongName);
             textViewContent = itemView.findViewById(R.id.textViewDetails);
             buttonFollow = itemView.findViewById(R.id.buttonFollow);
-            buttonSpotify = itemView.findViewById(R.id.buttonSpotify);
+            buttonSpotify = itemView.findViewById(R.id.imageButtonSpotify);
         }
     }
 }

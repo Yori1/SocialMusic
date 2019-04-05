@@ -6,16 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -36,10 +33,25 @@ public class MainActivity extends DrawerLayoutActivity {
         super.onCreate(savedInstance);
         //This method sets the views in the abstract class DrawerLayoutActivity
         setMenuLayoutElements(R.layout.activity_main, R.id.toolbar_main, R.id.drawer_layout_main);
+
         setCardAdapterToReviewList();
         configureFireStoreToLoadNewReviewsIntoList();
 
+//        TabItem tabItemFollowed = (TabItem) findViewById(R.id.tabItemFollowed);
+//        TabItem tabItemRecent = (TabItem) findViewById(R.id.tabItemRecent);
+//
+//
+//        if(tabItemFollowed.isSelected()){
+//
+//        }
+//        else if (tabItemRecent.isSelected()){
+//
+//        }
+
+
     }
+
+
 
     private void setCardAdapterToReviewList()
     {
