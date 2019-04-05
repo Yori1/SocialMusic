@@ -37,18 +37,16 @@ public class OtherUserProfileActivity extends DrawerLayoutActivity {
     private CardAdapter cardAdapter;
     private String ownerProfilePageFirestoreId;
     private Button buttonFollow;
-
-    boolean following;
-    String followString = "Follow";
-    String stopFollowingString = "stopFollowing";
-    ListenerRegistration registrationListener;
+    private Button buttonUnfollow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setMenuLayoutElements(R.layout.activity_other_user_profile, R.id.toolbar_profile_other, R.id.drawer_layout_profile_other);
         buttonFollow = findViewById(R.id.buttonFollow);
-        ownerProfilePageFirestoreId = getIntent().getStringExtra("userId");
+        buttonUnfollow = findViewById(R.id.buttonUnfollow);
+
+        ownerProfilePageFirestoreId = getIntent().getStringExtra("ownerProfilePageId");
 
         cardItems = new ArrayList<>();
         loadGeneralUserInformation();
@@ -57,6 +55,7 @@ public class OtherUserProfileActivity extends DrawerLayoutActivity {
 
         setOnChangeUsersFollowedUsers();
         setFollowButtonFireBaseFunctionality();
+        setUnfollowButtonFireBaseFunctionality();
 
     }
 
@@ -70,14 +69,34 @@ public class OtherUserProfileActivity extends DrawerLayoutActivity {
                 if(appUser.getUsersFollowingIds() == null ||
                         appUser.getUsersFollowingIds().stream().noneMatch(userId -> userId == ownerProfilePageFirestoreId))
                 {
-                    following = false;
-                    buttonFollow.setText(followString);
+                    updateUiFollowing(false);
                 }
                 else
                 {
-                    following = true;
-                    buttonFollow.setText(stopFollowingString);
+                    updateUiFollowing(true);
                 }
+            }
+        });
+    }
+
+
+    private void setUnfollowButtonFireBaseFunctionality()
+    {
+        Button followButton = findViewById(R.id.buttonUnfollow);
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentUsersUserId = getIntent().getStringExtra("userId");
+                DocumentReference currentUser = fireStore.collection("users").document(currentUsersUserId);
+                currentUser.update("usersFollowingIds", FieldValue.arrayRemove(ownerProfilePageFirestoreId))
+                        .onSuccessTask(new SuccessContinuation<Void, Object>() {
+                            @NonNull
+                            @Override
+                            public Task<Object> then(@android.support.annotation.Nullable Void aVoid) {
+                                updateUiFollowing(false);
+                                return null;
+                            }
+                        });
             }
         });
     }
@@ -89,43 +108,32 @@ public class OtherUserProfileActivity extends DrawerLayoutActivity {
             @Override
             public void onClick(View v) {
                 String currentUsersUserId = getIntent().getStringExtra("userId");
-
-                DocumentReference currentUserDocument = fireStore.collection("users").document(currentUsersUserId);
-                 registrationListener = currentUserDocument.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                DocumentReference currentUser = fireStore.collection("users").document(currentUsersUserId);
+                currentUser.update("usersFollowingIds", FieldValue.arrayUnion(ownerProfilePageFirestoreId))
+                        .onSuccessTask(new SuccessContinuation<Void, Object>() {
+                            @NonNull
                             @Override
-                            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                                AppUser appUser = documentSnapshot.toObject(AppUser.class);
-                                if(appUser.getUsersFollowingIds() == null ||
-                                        appUser.getUsersFollowingIds().stream().noneMatch(userId -> userId == ownerProfilePageFirestoreId))
-                                {
-                                    currentUserDocument.update("usersFollowingIds", FieldValue.arrayUnion(ownerProfilePageFirestoreId))
-                                            .onSuccessTask(new SuccessContinuation<Void, Object>() {
-                                                @NonNull
-                                                @Override
-                                                public Task<Object> then(@android.support.annotation.Nullable Void aVoid) {
-                                                    registrationListener.remove();
-                                                    return null;
-                                                }
-                                            });
-                                }
-
-                                else
-                                {
-                                    currentUserDocument.update("usersFollowingIds", FieldValue.arrayRemove(ownerProfilePageFirestoreId))
-                                            .onSuccessTask(new SuccessContinuation<Void, Object>() {
-                                                @NonNull
-                                                @Override
-                                                public Task<Object> then(@android.support.annotation.Nullable Void aVoid) {
-                                                    registrationListener.remove();
-                                                    return null;
-                                                }
-                                            });
-
-                                }
+                            public Task<Object> then(@android.support.annotation.Nullable Void aVoid) {
+                                updateUiFollowing(true);
+                                return null;
                             }
                         });
             }
         });
+    }
+
+    private void updateUiFollowing(boolean following)
+    {
+        if(following)
+        {
+            buttonFollow.setVisibility(View.GONE);
+            buttonUnfollow.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            buttonFollow.setVisibility(View.VISIBLE);
+            buttonUnfollow.setVisibility(View.GONE);
+        }
     }
 
     private void loadGeneralUserInformation()
@@ -152,7 +160,8 @@ public class OtherUserProfileActivity extends DrawerLayoutActivity {
         RecyclerView recyclerView = findViewById(R.id.cardList_profile_other);
         cardItems = new ArrayList<>();
 
-        cardAdapter = new CardAdapter(this, cardItems);
+        String userId = getIntent().getStringExtra("userId");
+        cardAdapter = new CardAdapter(this, cardItems, userId);
         recyclerView.setAdapter(cardAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

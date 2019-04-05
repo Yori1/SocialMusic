@@ -19,14 +19,14 @@ public class RecyclerFragmentAdapter extends FragmentPagerAdapter {
     private RecyclerViewFragment fragmentRecent;
     private RecyclerViewFragment fragmentFollowing;
 
-    public RecyclerFragmentAdapter(FragmentManager fm, Context context, List<CardItem> cardItemsRecent, List<CardItem> cardItemsFollowing) {
+    public RecyclerFragmentAdapter(FragmentManager fm, Context context, List<CardItem> cardItemsRecent, List<CardItem> cardItemsFollowing, String userId) {
         super(fm);
         this.context = context;
         this.cardItemsRecent = cardItemsRecent;
         this.cardItemsFollowing = cardItemsFollowing;
 
-        this.fragmentRecent = RecyclerViewFragment.newInstance(cardItemsRecent, R.layout.fragement_recyclerview_home, R.id.recyclerView);
-        this.fragmentFollowing = RecyclerViewFragment.newInstance(cardItemsFollowing, R.layout.fragment_recyclerview_following, R.id.reyclerViewFollowing);
+        this.fragmentRecent = RecyclerViewFragment.newInstance(cardItemsRecent, R.layout.fragement_recyclerview_home, R.id.recyclerView, userId);
+        this.fragmentFollowing = RecyclerViewFragment.newInstance(cardItemsFollowing, R.layout.fragment_recyclerview_following, R.id.reyclerViewFollowing, userId);
     }
 
     @Override

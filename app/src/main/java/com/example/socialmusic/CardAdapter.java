@@ -20,10 +20,12 @@ import Models.CardItem;
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> {
     Context mContext;
     List<CardItem> mData;
+    String userId;
 
-    public CardAdapter(Context mContext, List<CardItem> mData) {
+    public CardAdapter(Context mContext, List<CardItem> mData, String userId) {
         this.mContext = mContext;
         this.mData = mData;
+        this.userId = userId;
     }
 
     public void clearList()
@@ -54,8 +56,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
         myViewHolder.profilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(mContext, OtherUserProfileActivity.class);
-                intent.putExtra("userId", mData.get(i).getUserFirebaseId());
+                intent.putExtra("ownerProfilePageId", mData.get(i).getUserFirebaseId());
+                intent.putExtra("userId" ,userId);
                 mContext.startActivity(intent);
             }
         });

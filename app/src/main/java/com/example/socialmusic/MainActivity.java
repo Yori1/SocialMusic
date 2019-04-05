@@ -47,9 +47,10 @@ public class MainActivity extends DrawerLayoutActivity {
     {
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        String userId = this.getIntent().getStringExtra("userId");
 
         recyclerFragmentAdapter = new RecyclerFragmentAdapter(getSupportFragmentManager(),
-                MainActivity.this, recentCardItems, followingCardItems);
+                MainActivity.this, recentCardItems, followingCardItems, userId);
 
         ViewPager viewPager = findViewById(R.id.viewpager);
 

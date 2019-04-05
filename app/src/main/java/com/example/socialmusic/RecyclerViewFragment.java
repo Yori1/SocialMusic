@@ -23,16 +23,18 @@ public class RecyclerViewFragment extends Fragment {
 
     int idLayoutFragment;
     int idRecyclerViewToUse;
+    String userId;
 
     private CardAdapter cardAdapter;
 
-    public static RecyclerViewFragment newInstance(List<CardItem> cardItems, @LayoutRes int idLayoutFragment, int idRecyclerViewToUse) {
+    public static RecyclerViewFragment newInstance(List<CardItem> cardItems, @LayoutRes int idLayoutFragment, int idRecyclerViewToUse, String userId) {
         Bundle args = new Bundle();
         CardItemCollection cardItemCollection = new CardItemCollection(cardItems);
         Gson gson = new Gson();
         args.putString("cardItems", gson.toJson(cardItemCollection));
         args.putInt("idLayoutFragment", idLayoutFragment);
         args.putInt("idRecyclerViewToUse", idRecyclerViewToUse);
+        args.putString("userId", userId);
         RecyclerViewFragment fragment = new RecyclerViewFragment();
         fragment.setArguments(args);
         return fragment;
@@ -51,6 +53,7 @@ public class RecyclerViewFragment extends Fragment {
         this.context = getActivity();
         this.idRecyclerViewToUse = getArguments().getInt("idRecyclerViewToUse");
         this.idLayoutFragment = getArguments().getInt("idLayoutFragment");
+        this.userId = getArguments().getString("userId");
         String jsonCardItems = getArguments().getString("cardItems");
         cardItemList = cardItemCollectionJsonToList(jsonCardItems);
     }
@@ -59,7 +62,7 @@ public class RecyclerViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(idLayoutFragment, container, false);
         RecyclerView recyclerViewToSetAdapter  = view.findViewById(idRecyclerViewToUse);
-        cardAdapter = new CardAdapter(context, cardItemList);
+        cardAdapter = new CardAdapter(context, cardItemList, userId);
         recyclerViewToSetAdapter.setAdapter(cardAdapter);
         recyclerViewToSetAdapter.setLayoutManager(new LinearLayoutManager(context));
         return view;
