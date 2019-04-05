@@ -1,24 +1,23 @@
-package Models;
+package com.example.socialmusic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.style.TtsSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.socialmusic.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> {
+import Models.CardItem;
 
+public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> {
     Context mContext;
     List<CardItem> mData;
 
@@ -51,6 +50,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
         Picasso.get().load(mData.get(i).getAppUser().getImage()).into(myViewHolder.profilePhoto);
         myViewHolder.textViewSongName.setText(mData.get(i).getReview().getSongName());
         myViewHolder.textViewContent.setText(mData.get(i).getReview().getContent());
+
+        myViewHolder.profilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, OtherUserProfileActivity.class);
+                intent.putExtra("userId", mData.get(i).getUserFirebaseId());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -63,7 +71,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
         ImageView profilePhoto,background_img;
         TextView textViewSongName;
         TextView textViewContent;
-        Button buttonFollow;
         ImageButton buttonSpotify;
 
         public myViewHolder(@NonNull View itemView) {
@@ -73,8 +80,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
             background_img = itemView.findViewById(R.id.card_background);
             textViewSongName = itemView.findViewById(R.id.textViewSongName);
             textViewContent = itemView.findViewById(R.id.textViewDetails);
-            buttonFollow = itemView.findViewById(R.id.buttonFollow);
-            buttonSpotify = itemView.findViewById(R.id.imageButtonSpotify);
+            buttonSpotify = itemView.findViewById(R.id.buttonSpotify);
         }
     }
 }
