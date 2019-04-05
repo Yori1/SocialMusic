@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/CustomTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ShareThoughtActivity"></activity>
+        <activity android:name=".OtherUserProfileActivity"></activity>
+        <activity android:name=".ShareThoughtActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ProfileActivity" />
         <activity

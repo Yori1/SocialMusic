@@ -48,7 +48,6 @@ public class MainActivity extends DrawerLayoutActivity {
 
         RecyclerView recyclerView = findViewById(R.id.cardList_RV);
         itemList = new ArrayList<>();
-        itemList.add(new CardItem(new AppUser("a", "a", "a"), new Review("a","a")));
 
         cardAdapter = new CardAdapter(this, itemList);
         recyclerView.setAdapter(cardAdapter);
@@ -78,7 +77,7 @@ public class MainActivity extends DrawerLayoutActivity {
                 if(documentsFound.size() > 0)
                 {
                     AppUser appUser = documentsFound.get(0).toObject(AppUser.class);
-                    CardItem cardItem = new CardItem(appUser, review);
+                    CardItem cardItem = new CardItem(documentsFound.get(0).getId(), appUser, review);
                     cardAdapter.addToList(cardItem);
                 }
             }

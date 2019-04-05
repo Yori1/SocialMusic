@@ -90,7 +90,7 @@ public class SigninActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    AppUser appUser = new AppUser(user.getDisplayName(), "", user.getPhotoUrl().toString());
+                    AppUser appUser = new AppUser(documentSnapshot.getId(), user.getDisplayName(), user.getPhotoUrl().toString());
                     firebaseFirestore.collection("users").document(user.getUid()).set(appUser);
                 }
             }
