@@ -19,6 +19,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -168,10 +169,13 @@ public class OtherUserProfileActivity extends DrawerLayoutActivity {
 
     private void configureFireStoreToLoadNewReviewsIntoList()
     {
-        fireStore.collection("reviews").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        fireStore.collection("reviews").orderBy("created", Query.Direction.DESCENDING).
+                addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 cardAdapter.clearList();
+                int count = queryDocumentSnapshots.size();
+                cardAdapter.maxSize = count;
                 queryDocumentSnapshots.forEach(reviewSnapshot -> {
                     Review review = reviewSnapshot.toObject(Review.class);
                     addCardItemToListIfFromUser(review, reviewSnapshot.getId());

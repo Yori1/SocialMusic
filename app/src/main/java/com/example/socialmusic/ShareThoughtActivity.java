@@ -45,11 +45,10 @@ public class ShareThoughtActivity extends DrawerLayoutActivity {
         String userId = getIntent().getStringExtra("userId");
         Review review = new Review(editTextSongName.getText().toString(), editTextContent.getText().toString());
         fireStore.collection("reviews").add(review).addOnSuccessListener(addedReview -> {
-
             fireStore.collection("users").document(userId).update("reviewIds", FieldValue.arrayUnion(addedReview.getId()));
         });
 
-        Intent intent = buildIntentForActivity(ProfileActivity.class);
-        startActivity(intent);
+        Intent intentMain = buildIntentForActivity(MainActivity.class);
+        startActivity(intentMain);
     }
 }

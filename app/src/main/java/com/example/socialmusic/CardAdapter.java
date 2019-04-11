@@ -25,6 +25,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
     List<CardItem> mData;
     String userId;
 
+    public int maxSize;
+
     public CardAdapter(Context mContext, List<CardItem> mData, String userId) {
         this.mContext = mContext;
         this.mData = mData;
@@ -38,8 +40,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.myViewHolder> 
 
     public void addToList(CardItem cardItem)
     {
-        mData.add(cardItem);
-        notifyDataSetChanged();
+        if(maxSize != mData.size())
+        {
+            mData.add(cardItem);
+            notifyDataSetChanged();
+        }
     }
 
     @NonNull

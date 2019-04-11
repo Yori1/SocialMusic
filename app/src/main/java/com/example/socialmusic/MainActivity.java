@@ -12,7 +12,9 @@ import android.view.WindowManager;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ import Models.CardItem;
 import Models.Review;
 
 public class MainActivity extends DrawerLayoutActivity {
-    private final long limitCardsToDisplay = 30;
+    private int limitCardsToDisplay = 30;
 
     List<CardItem> recentCardItems;
     List<CardItem> followingCardItems;
@@ -49,6 +51,7 @@ public class MainActivity extends DrawerLayoutActivity {
             public void onClick(View v) {
                 Intent intent = buildIntentForActivity(ShareThoughtActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -72,10 +75,13 @@ public class MainActivity extends DrawerLayoutActivity {
 
     private void configureFireStoreToLoadNewReviewsIntoList()
     {
-        fireStore.collection("reviews").limit(limitCardsToDisplay).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        fireStore.collection("reviews").limit(limitCardsToDisplay).orderBy("created", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 recyclerFragmentAdapter.getFragmentRecent().getCardAdapter().clearList();
+                int count = queryDocumentSnapshots.size();
+                recyclerFragmentAdapter.getFragmentRecent().getCardAdapter().maxSize = count;
+
                 queryDocumentSnapshots.forEach(reviewSnapshot -> {
                     Review review = reviewSnapshot.toObject(Review.class);
                     addCardItemToList(review, reviewSnapshot.getId());

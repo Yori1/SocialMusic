@@ -1,12 +1,16 @@
 package Models;
 
+import com.google.firebase.firestore.ServerTimestamp;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AppUser {
     String displayName;
     String description;
     String image;
+
     List<String> usersFollowingIds;
     List<String> reviewIds;
 
@@ -40,5 +44,9 @@ public class AppUser {
 
     public String getImage() {
         return image;
+    }
+
+    public List<String> getReviewIds() {
+        return reviewIds;
     }
 }
