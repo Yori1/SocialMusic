@@ -75,6 +75,43 @@ public class MainActivity extends DrawerLayoutActivity {
 
     private void configureFireStoreToLoadNewReviewsIntoList()
     {
+        setupFragmentRecent();
+        setupFragmentFollowing();
+    }
+
+    void setupFragmentFollowing()
+    {
+        String userId = getIntent().getStringExtra("userId");
+
+        fireStore.collection("users").document(userId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot.exists())
+                {
+                    AppUser userFound = documentSnapshot.toObject(AppUser.class);
+                    List<String> idsFollowing = userFound.getUsersFollowingIds();
+
+                    fireStore.collection("reviews").limit(limitCardsToDisplay).orderBy("created", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                            recyclerFragmentAdapter.getFragmentFollowing().getCardAdapter().clearList();
+                            int count = queryDocumentSnapshots.size();
+                            recyclerFragmentAdapter.getFragmentFollowing().getCardAdapter().maxSize = count;
+
+                            queryDocumentSnapshots.forEach(reviewSnapshot -> {
+                                Review review = reviewSnapshot.toObject(Review.class);
+                                addCardItemToListFollowing(review, reviewSnapshot.getId(), idsFollowing);
+                            });
+                        }
+                    });
+                }
+
+            }
+        });
+    }
+
+    void setupFragmentRecent()
+    {
         fireStore.collection("reviews").limit(limitCardsToDisplay).orderBy("created", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -84,13 +121,32 @@ public class MainActivity extends DrawerLayoutActivity {
 
                 queryDocumentSnapshots.forEach(reviewSnapshot -> {
                     Review review = reviewSnapshot.toObject(Review.class);
-                    addCardItemToList(review, reviewSnapshot.getId());
+                    addCardItemToListRecent(review, reviewSnapshot.getId());
                 });
             }
         });
     }
 
-    private void addCardItemToList(Review review, String reviewId)
+    private void addCardItemToListFollowing(Review review, String reviewId, List<String> userIdsFollowing)
+    {
+        fireStore.collection("users").whereArrayContains("reviewIds", reviewId).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                List<DocumentSnapshot> documentsFound = queryDocumentSnapshots.getDocuments();
+                if(documentsFound.size() > 0)
+                {
+                    if(userIdsFollowing.contains(documentsFound.get(0).getId()))
+                    {
+                        AppUser appUser = documentsFound.get(0).toObject(AppUser.class);
+                        CardItem cardItem = new CardItem(documentsFound.get(0).getId(), appUser, review);
+                        recyclerFragmentAdapter.getFragmentFollowing().getCardAdapter().addToList(cardItem);
+                    }
+                }
+            }
+        });
+    }
+
+    private void addCardItemToListRecent(Review review, String reviewId)
     {
         fireStore.collection("users").whereArrayContains("reviewIds", reviewId).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

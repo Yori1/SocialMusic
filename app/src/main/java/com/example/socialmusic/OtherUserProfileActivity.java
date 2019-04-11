@@ -67,8 +67,9 @@ public class OtherUserProfileActivity extends DrawerLayoutActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 AppUser appUser = documentSnapshot.toObject(AppUser.class);
-                if(appUser.getUsersFollowingIds() == null ||
-                        appUser.getUsersFollowingIds().stream().noneMatch(userId -> userId == ownerProfilePageFirestoreId))
+                List<String> usersFollowingIds = appUser.getUsersFollowingIds();
+                if(usersFollowingIds == null ||
+                        usersFollowingIds.stream().noneMatch(userId -> userId.equals(ownerProfilePageFirestoreId)))
                 {
                     updateUiFollowing(false);
                 }
