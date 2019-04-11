@@ -42,6 +42,10 @@ public class MainActivity extends DrawerLayoutActivity {
         setMenuLayoutElements(R.layout.activity_main, R.id.toolbar_main, R.id.drawer_layout_main);
         setCardAdapterToReviewList();
         configureFireStoreToLoadNewReviewsIntoList();
+
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+//        tabLayout.addTab(new TabLayout.Tab().setText("Recent"), true);
+//        tabLayout.addTab(new TabLayout.Tab().setText("Following"), false);
     }
 
     private void setCardAdapterToReviewList()
