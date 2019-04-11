@@ -40,24 +40,23 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
-                android:background="@color/browser_actions_bg_grey"
-                android:backgroundTint="@color/browser_actions_bg_grey"
-                android:backgroundTintMode="src_over" />
+                android:backgroundTintMode="src_over"
+                android:hint="What song did you hear?"/>
 
             <EditText
                 android:id="@+id/editTextContent"
                 android:layout_width="305dp"
                 android:layout_height="110dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginLeft="20dp"
-                android:background="@color/browser_actions_bg_grey"
-                android:hint="what did this song make you feel?" />
+                android:hint="How did you feel about it?" />
 
             <Button
                 android:id="@+id/buttonSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:background="@color/fui_bgAnonymous"
+                android:background="@color/colorPrimaryDark"
                 android:padding="5dp"
                 android:text="Share thoughts" />
 

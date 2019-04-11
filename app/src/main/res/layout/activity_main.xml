@@ -58,12 +58,14 @@
 
 
         <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButtonAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="8dp"
             android:backgroundTint="@color/colorPrimary"
-            android:src="@drawable/ic_menu_camera"
+            android:src="@drawable/plus_transparent"
+            android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent">
 

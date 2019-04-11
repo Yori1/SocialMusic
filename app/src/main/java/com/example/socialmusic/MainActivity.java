@@ -1,6 +1,8 @@
 package com.example.socialmusic;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -10,7 +12,9 @@ import android.view.WindowManager;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +27,7 @@ import Models.CardItem;
 import Models.Review;
 
 public class MainActivity extends DrawerLayoutActivity {
-    private final long limitCardsToDisplay = 30;
+    private int limitCardsToDisplay = 30;
 
     List<CardItem> recentCardItems;
     List<CardItem> followingCardItems;
@@ -37,19 +41,29 @@ public class MainActivity extends DrawerLayoutActivity {
         recentCardItems = new ArrayList<>();
         followingCardItems = new ArrayList<>();
 
-        //This method sets the views in the abstract class DrawerLayoutActivity
         setMenuLayoutElements(R.layout.activity_main, R.id.toolbar_main, R.id.drawer_layout_main);
         setCardAdapterToReviewList();
         configureFireStoreToLoadNewReviewsIntoList();
+
+        FloatingActionButton fab = findViewById(R.id.floatingActionButtonAdd);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = buildIntentForActivity(ShareThoughtActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void setCardAdapterToReviewList()
     {
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        String userId = this.getIntent().getStringExtra("userId");
 
         recyclerFragmentAdapter = new RecyclerFragmentAdapter(getSupportFragmentManager(),
-                MainActivity.this, recentCardItems, followingCardItems);
+                MainActivity.this, recentCardItems, followingCardItems, userId);
 
         ViewPager viewPager = findViewById(R.id.viewpager);
 
@@ -61,10 +75,13 @@ public class MainActivity extends DrawerLayoutActivity {
 
     private void configureFireStoreToLoadNewReviewsIntoList()
     {
-        fireStore.collection("reviews").limit(limitCardsToDisplay).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        fireStore.collection("reviews").limit(limitCardsToDisplay).orderBy("created", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 recyclerFragmentAdapter.getFragmentRecent().getCardAdapter().clearList();
+                int count = queryDocumentSnapshots.size();
+                recyclerFragmentAdapter.getFragmentRecent().getCardAdapter().maxSize = count;
+
                 queryDocumentSnapshots.forEach(reviewSnapshot -> {
                     Review review = reviewSnapshot.toObject(Review.class);
                     addCardItemToList(review, reviewSnapshot.getId());
